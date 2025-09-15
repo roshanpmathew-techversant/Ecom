@@ -1,0 +1,88 @@
+const items = [
+  {
+    id: 2,
+    name: "Smart Watch",
+    desc: "Track your health and fitness with this sleek smartwatch.",
+    price: 149.99,
+    image: "https://picsum.photos/200?random=2",
+  },
+  {
+    id: 3,
+    name: "Gaming Mouse",
+    desc: "Ergonomic design with customizable buttons and RGB lighting.",
+    price: 49.99,
+    image: "https://picsum.photos/200?random=3",
+  },
+  {
+    id: 4,
+    name: "Bluetooth Speaker",
+    desc: "Portable speaker with rich bass and waterproof design.",
+    price: 89.99,
+    image: "https://picsum.photos/200?random=4",
+  },
+  {
+    id: 5,
+    name: "Mechanical Keyboard",
+    desc: "RGB backlit keyboard with tactile switches for gaming.",
+    price: 129.99,
+    image: "https://picsum.photos/200?random=5",
+  },
+  {
+    id: 6,
+    name: "4K Monitor",
+    desc: "Ultra HD 27-inch monitor for work and gaming.",
+    price: 329.99,
+    image: "https://picsum.photos/200?random=6",
+  },
+  {
+    id: 7,
+    name: "DSLR Camera",
+    desc: "Capture stunning photos with 24MP resolution and 4K video.",
+    price: 599.99,
+    image: "https://picsum.photos/200?random=7",
+  },
+  {
+    id: 8,
+    name: "Laptop Backpack",
+    desc: "Durable and water-resistant backpack with multiple compartments.",
+    price: 59.99,
+    image: "https://picsum.photos/200?random=8",
+  },
+  {
+    id: 9,
+    name: "Smartphone",
+    desc: "Latest generation phone with AMOLED display and 5G support.",
+    price: 899.99,
+    image: "https://picsum.photos/200?random=9",
+  },
+  {
+    id: 1,
+    name: "Wireless Headphones",
+    desc: "Noise-cancelling over-ear headphones with long battery life.",
+    price: 199.99,
+    image: "https://picsum.photos/200?random=1",
+  },
+  {
+    id: 10,
+    name: "Fitness Tracker",
+    desc: "Monitor your steps, heart rate, and sleep cycles.",
+    price: 79.99,
+    image: "https://picsum.photos/200?random=10",
+  },
+  {
+    id: 11,
+    name: "Wireless Charger",
+    desc: "Fast charging pad compatible with all Qi devices.",
+    price: 29.99,
+    image: "https://picsum.photos/200?random=11",
+  },
+  {
+    id: 12,
+    name: "Action Camera",
+    desc: "Compact waterproof camera for recording adventures in 4K.",
+    price: 249.99,
+    image: "https://picsum.photos/200?random=12",
+  },
+];
+
+export default items;

@@ -1,0 +1,98 @@
+E-Commerce Website Requirements
+Technology Stack
+
+Frontend: React (with Tailwind / Material UI for styling, optional Redux/Context API for state management)
+
+Backend: Node.js + Express
+
+Database: MongoDB (Mongoose ODM)
+
+Authentication & Authorization: JWT (JSON Web Tokens)
+
+User Roles & Access Levels
+1. Guest User (Not Logged In)
+
+Access:
+
+Browse/Search Products
+
+View Product Details
+
+Add Products to Cart (stored in localStorage or session until login/register)
+
+Restrictions:
+
+Cannot checkout or place an order until registered/login
+
+2. Registered User
+
+Access:
+
+All Guest User functionalities
+
+User Registration & Login (JWT authentication)
+
+Manage Profile (name, email, address, password change)
+
+Manage Cart (add/remove/update quantity)
+
+Checkout & Place Orders
+
+View Order History
+
+Save Favorites / Wishlist (optional feature)
+
+Restrictions:
+
+Cannot add, update, or delete items in the store
+
+3. Admin
+
+Access:
+
+Add New Products (with title, description, price, category, stock, images)
+
+Update Products (edit details, change stock, update price)
+
+Delete Products
+
+Manage Categories (create/update/delete)
+
+View All Orders (for processing and analytics)
+
+Manage Users (view, block/unblock, reset password if needed)
+
+Restrictions:
+
+Cannot purchase products
+
+Core Features
+Product Management
+
+Categories & Filters (price, rating, category, availability)
+
+Product details page (images, description, reviews, stock availability)
+
+Cart & Checkout
+
+Cart persistence (guest cart in localStorage → migrate to DB after login)
+
+Update quantities, remove items
+
+Checkout with shipping details
+
+Payment Integration (Stripe/PayPal or Cash on Delivery option)
+
+Order Management
+
+Users: Can place orders, track order status (Pending, Shipped, Delivered, Cancelled)
+
+Admin: Can view/manage all orders, update order status
+
+Authentication & Security
+
+JWT authentication (access + refresh tokens)
+
+Password hashing with bcrypt
+
+Role-based authorization (middleware to restrict admin-only routes)
