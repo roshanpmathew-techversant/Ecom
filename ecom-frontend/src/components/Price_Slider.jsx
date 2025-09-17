@@ -1,48 +1,66 @@
-import React from "react";
-import { useState } from "react";
-const Price_Slider = () => {
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(100000);
+import React, { useState } from "react";
+
+const Price_Slider = ({ min, max, setMax, setMin }) => {
+  const minGap = 200;
+  const sliderMax = 100000;
+
+  const handleMinChange = (e) => {
+    const value = Math.min(Number(e.target.value), max - minGap);
+    setMin(value);
+  };
+
+  const handleMaxChange = (e) => {
+    const value = Math.max(Number(e.target.value), min + minGap);
+    setMax(value);
+  };
 
   return (
     <div className="flex justify-center items-center">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-sm">
-        {/* Title */}
-        <h2 className="text-1xl font-semibold text-slate-800 mb-2">
+        <h2 className="text-1xl font-semibold text-slate-800 mb-4">
           Price Range
         </h2>
 
-        {/* Values */}
-        <div className="flex items-center text-blue-600 font-medium mb-2">
-          <span>${min}</span>
+        {/* Current range display */}
+        <div className="flex items-center text-blue-600 font-medium mb-4">
+          <span>₹{min.toLocaleString()}</span>
           <span className="mx-2">-</span>
-          <span>${max}</span>
+          <span>₹{max.toLocaleString()}</span>
         </div>
 
-        {/* Current Range */}
-        <p className="text-gray-500 text-sm mb-4">
-          Current Range:{" "}
-          <span className="text-slate-700 font-semibold">${max - min}</span>
-        </p>
+        {/* Slider */}
+        <div className="relative w-full h-2">
+          {/* background track */}
+          <div className="absolute w-full h-1 bg-gray-300 rounded"></div>
 
-        {/* Labels */}
-        <div className="flex justify-between text-xs text-gray-500 mb-2">
-          <span>1</span>
-          <span>10,000</span>
-        </div>
+          {/* active range */}
+          <div
+            className="absolute h-1 bg-blue-500 rounded"
+            style={{
+              left: `${(min / sliderMax) * 100}%`,
+              right: `${100 - (max / sliderMax) * 100}%`,
+            }}
+          ></div>
 
-        {/* Range Sliders */}
-        <div className="relative h-8">
-          {/* Min */}
-
-          {/* Max */}
+          {/* Min handle */}
           <input
             type="range"
-            min="1"
-            max="10000"
+            min="0"
+            max={sliderMax}
+            value={min}
+            onChange={handleMinChange}
+            className="absolute w-full h-2 bg-transparent appearance-none pointer-events-none"
+            style={{ zIndex: min > sliderMax - 1000 ? "5" : "3" }}
+          />
+
+          {/* Max handle */}
+          <input
+            type="range"
+            min="0"
+            max={sliderMax}
             value={max}
-            onChange={(e) => setMax(Number(e.target.value))}
-            className="absolute w-full h-1   cursor-pointer accent-blue-500"
+            onChange={handleMaxChange}
+            className="absolute w-full h-2 bg-transparent appearance-none pointer-events-none"
           />
         </div>
       </div>

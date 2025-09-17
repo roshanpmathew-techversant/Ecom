@@ -36,7 +36,7 @@ const ItemCard = ({ item }) => {
 
       <div className="flex justify-between items-center mt-auto">
         <p className="text-lg font-semibold text-gray-800">
-          <span className="text-gray-500">$</span> {price}
+          <span className="text-gray-500">₹</span> {price}
         </p>
 
         <button className="cursor-pointer h-9 w-9 flex items-center justify-center border-2 border-gray-800 rounded-md transition-all duration-300 hover:border-green-400 active:translate-y-1">

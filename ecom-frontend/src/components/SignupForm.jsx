@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signup } from "../services/api/services";
 
 const Signupform = () => {
   const nav = useNavigate();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await signup(form.name, form.email, form.password);
+      alert("SignUp Success");
+      nav("/shop");
+    } catch (e) {
+      console.log("Error", e);
+    }
+  };
+
   return (
     <div className="w-80 flex flex-col gap-6 rounded-lg shadow-lg p-6 bg-white">
       {/* Header */}
@@ -12,21 +34,25 @@ const Signupform = () => {
       </div>
 
       {/* Form */}
-      <form className="flex flex-col gap-4 w-full">
+      <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
         {/* Username */}
         <input
           className="outline-none border-2 rounded-md px-3 py-2 text-slate-600 w-full focus:border-blue-400"
           placeholder="Username"
-          id="username"
-          name="username"
+          id="name"
+          name="name"
           type="text"
+          value={form.name}
+          onChange={handleChange}
         />
         <input
           className="outline-none border-2 rounded-md px-3 py-2 text-slate-600 w-full focus:border-blue-400"
           placeholder="Email"
-          id="mail"
-          name="mail"
+          id="email"
+          name="email"
           type="email"
+          value={form.email}
+          onChange={handleChange}
         />
 
         {/* Password */}
@@ -36,6 +62,8 @@ const Signupform = () => {
           id="password"
           name="password"
           type="password"
+          value={form.password}
+          onChange={handleChange}
         />
 
         {/* Options */}
@@ -56,7 +84,7 @@ const Signupform = () => {
 
         {/* Submit Button */}
         <button
-          className="w-full py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 rounded-md text-white font-medium transition"
+          className="w-full py-2 cursor-pointer bg-blue-500 hover:bg-blue-600 active:bg-blue-700 rounded-md text-white font-medium transition"
           id="login"
           name="login"
           type="submit"

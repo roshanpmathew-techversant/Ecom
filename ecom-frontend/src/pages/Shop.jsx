@@ -16,8 +16,9 @@ const Shop = () => {
   const [price, setPrice] = useState("");
   const [sort, setSort] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(100000);
 
-  // ✅ handle category changes
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
@@ -26,23 +27,22 @@ const Shop = () => {
     );
   };
 
-  // ✅ Filtering logic
   let filteredItems = items.filter(
     (item) =>
       (selectedCategories.length === 0 ||
         selectedCategories.includes(item.category)) &&
       (item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.desc.toLowerCase().includes(search.toLowerCase()))
+        item.desc.toLowerCase().includes(search.toLowerCase())) &&
+      item.price >= min &&
+      item.price <= max
   );
 
-  // ✅ Price sorting
   if (price === "Low to High") {
     filteredItems = filteredItems.sort((a, b) => a.price - b.price);
   } else if (price === "High to Low") {
     filteredItems = filteredItems.sort((a, b) => b.price - a.price);
   }
 
-  // ✅ Sort by rating/date
   if (sort === "Rate") {
     filteredItems = filteredItems.sort((a, b) => b.rating - a.rating);
   } else if (sort === "New") {
@@ -53,18 +53,19 @@ const Shop = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-5 flex gap-6">
-      {/* Sidebar - 20% */}
       <div className="w-1/5">
         <Shop_SideBar
           categories={categories}
           selectedCategories={selectedCategories}
           onCategoryChange={handleCategoryChange}
+          min={min}
+          max={max}
+          setMax={setMax}
+          setMin={setMin}
         />
       </div>
 
-      {/* Main content - 80% */}
       <div className="w-4/5">
-        {/* 🔎 Search bar + filters */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
           <input
             type="text"
@@ -74,7 +75,6 @@ const Shop = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          {/* Price filter */}
           <select
             value={price}
             onChange={(e) => setPrice(e.target.value)}
@@ -85,7 +85,6 @@ const Shop = () => {
             <option value={"High to Low"}>High to Low</option>
           </select>
 
-          {/* Rating / Date sort */}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
@@ -97,7 +96,6 @@ const Shop = () => {
           </select>
         </div>
 
-        {/* Products grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => <ItemCard key={item.id} item={item} />)
