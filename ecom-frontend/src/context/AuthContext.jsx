@@ -41,31 +41,33 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
   };
-
   useEffect(() => {
     const validateRoute = async () => {
       setLoading(true);
 
-      const publicRoutes = ["/login", "/signup", "/", "/shop", "/item/:id"];
+      const authRoutes = ["/login", "/signup"];
+      const publicRoutes = ["/", "/shop", "/item/:id"];
 
+      const isAuthRoute = authRoutes.some((route) =>
+        matchPath({ path: route, end: true }, location.pathname)
+      );
       const isPublicRoute = publicRoutes.some((route) =>
         matchPath({ path: route, end: true }, location.pathname)
       );
+
       const isAuth = await checkAuthUser();
 
-      if (isPublicRoute) {
-        if (isAuth) {
-          if (user?.status === "admin") {
-            navigate("/admindash", { replace: true });
-          } else {
-            navigate("/shop", { replace: true });
-          }
+      if (isAuthRoute && isAuth) {
+        if (user?.status === "admin") {
+          navigate("/admindash", { replace: true });
+        } else {
+          navigate("/shop", { replace: true });
         }
-      } else {
-        if (!isAuth) {
-          console.log("Not Logged");
-          navigate("/login", { replace: true });
-        }
+      }
+
+      if (!isPublicRoute && !isAuth) {
+        console.log("Not Logged");
+        navigate("/login", { replace: true });
       }
 
       setLoading(false);
@@ -73,6 +75,7 @@ export const AuthProvider = ({ children }) => {
 
     validateRoute();
   }, [location.pathname, navigate]);
+
   return (
     <AuthContext.Provider
       value={{ user, setUser, isAuthenticated, loading, checkAuthUser }}

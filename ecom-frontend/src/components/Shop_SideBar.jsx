@@ -10,6 +10,8 @@ const Shop_SideBar = ({
   max,
   setMin,
   setMax,
+  selectedRating,
+  onRatingChange,
 }) => {
   return (
     <div className="p-4 w-full h-full rounded-lg bg-white shadow-md flex gap-5 flex-col">
@@ -32,7 +34,10 @@ const Shop_SideBar = ({
         ))}
       </div>
       <Price_Slider min={min} max={max} setMax={setMax} setMin={setMin} />
-      <RatingBar />
+      <RatingBar
+        selectedRating={selectedRating}
+        onRatingChange={onRatingChange}
+      />
     </div>
   );
 };

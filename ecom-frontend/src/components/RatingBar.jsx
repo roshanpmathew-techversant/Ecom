@@ -1,50 +1,30 @@
 import React from "react";
-import { Star, StarHalfIcon } from "lucide-react";
+import { Star } from "lucide-react";
 
-const RatingBar = () => {
+const RatingBar = ({ selectedRating, onRatingChange }) => {
+  const ratings = [5, 4, 3];
+
   return (
     <div>
-      <p>Customer Ratings</p>
-      <div className="mt-5">
-        <span className="flex flex-row gap-4">
-          <input
-            type="checkbox"
-            className="h-4 w-4"
-            name="rating"
-            id="5stars"
-          />
-          <p className="flex flex-row gap-1">
-            <span>5</span>
-            <Star size={20} color="gold" fill="gold" />
-            <span>&above</span>
-          </p>
-        </span>
-        <span className="flex flex-row gap-4">
-          <input
-            type="checkbox"
-            className="h-4 w-4"
-            name="rating"
-            id="5stars"
-          />
-          <p className="flex flex-row gap-1">
-            <span>4</span>
-            <Star size={20} color="gold" fill="gold" />
-            <span>&above</span>
-          </p>
-        </span>
-        <span className="flex flex-row gap-4">
-          <input
-            type="checkbox"
-            className="h-4 w-4"
-            name="rating"
-            id="5stars"
-          />
-          <p className="flex flex-row gap-1">
-            <span>3</span>
-            <Star size={20} color="gold" fill="gold" />
-            <span>&above</span>
-          </p>
-        </span>
+      <p className="font-semibold">Customer Ratings</p>
+      <div className="mt-5 flex flex-col gap-2">
+        {ratings.map((rate) => (
+          <label key={rate} className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="radio"
+              name="rating"
+              value={rate}
+              checked={selectedRating === rate}
+              onChange={() => onRatingChange(rate)}
+              className="accent-blue-500"
+            />
+            <span className="flex flex-row gap-1 text-sm">
+              <span>{rate}</span>
+              <Star size={18} color="gold" fill="gold" />
+              <span>& above</span>
+            </span>
+          </label>
+        ))}
       </div>
     </div>
   );

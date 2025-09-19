@@ -20,12 +20,12 @@ const Shop = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100000);
+  const [selectedRating, setSelectedRating] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const product = await getProducts();
-
         setItems(product.products);
       } catch (error) {
         console.log(error);
@@ -49,13 +49,14 @@ const Shop = () => {
       (item.ProductName.toLowerCase().includes(search.toLowerCase()) ||
         item.ProductDesc.toLowerCase().includes(search.toLowerCase())) &&
       item.Price >= min &&
-      item.Price <= max
+      item.Price <= max &&
+      (selectedRating === null || item.rating >= selectedRating)
   );
 
   if (price === "Low to High") {
-    filteredItems = filteredItems.sort((a, b) => a.price - b.price);
+    filteredItems = filteredItems.sort((a, b) => a.Price - b.Price);
   } else if (price === "High to Low") {
-    filteredItems = filteredItems.sort((a, b) => b.price - a.price);
+    filteredItems = filteredItems.sort((a, b) => b.Price - a.Price);
   }
 
   if (sort === "Rate") {
@@ -77,6 +78,8 @@ const Shop = () => {
           max={max}
           setMax={setMax}
           setMin={setMin}
+          selectedRating={selectedRating}
+          onRatingChange={setSelectedRating}
         />
       </div>
 
