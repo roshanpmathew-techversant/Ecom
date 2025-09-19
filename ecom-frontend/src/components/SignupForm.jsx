@@ -21,7 +21,9 @@ const Signupform = () => {
       alert("SignUp Success");
       nav("/shop");
     } catch (e) {
-      console.log("Error", e);
+      const errorMsg = e.response?.data?.message || "User Already Exists";
+      alert(errorMsg);
+      console.error("Signup Error:", e.response?.data || e.message);
     }
   };
 

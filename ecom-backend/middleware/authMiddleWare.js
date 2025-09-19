@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import generateToken from "../utils/token.js";
 const JWT = process.env.JWT_SECRET;
+const REFRESH = process.env.REFRESH_SECRET;
 
 const protect = async (req, res, next) => {
   let token;
@@ -10,17 +12,17 @@ const protect = async (req, res, next) => {
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-
       const decode = jwt.verify(token, JWT);
 
       req.user = await User.findById(decode.id).select("-password");
       next();
     } catch (e) {
-      console.log("Auth Error");
-      res.status(401).json({ message: "Not Authorized" });
+      if (e.name === "TokenExpiredError") {
+        return res.status(401).json({ message: "Token expired" });
+      }
+      res.status(401).json({ message: "Invalid token" });
     }
-  }
-  if (!token) {
+  } else {
     return res.status(401).json({ message: "No Token, Not Authorized" });
   }
 };
@@ -30,6 +32,25 @@ const admin = async (req, res, next) => {
     next();
   } else {
     res.status(403).json({ message: "Admin Access Only" });
+  }
+};
+
+export const refreshAccessToken = (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken)
+    return res.status(401).json({
+      message: "No Refresh Token",
+    });
+  try {
+    const decoded = jwt.verify(refreshToken, REFRESH);
+    const newAccessToken = generateToken(decoded.id, decoded.status);
+    res.json({
+      accessToken: newAccessToken,
+    });
+  } catch (e) {
+    res.status(403).json({
+      message: "Invalid Refresh Token",
+    });
   }
 };
 

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ItemCard from "../components/ItemCard";
-import items from "../SampleDb/items";
 import Shop_SideBar from "../components/Shop_SideBar";
+import ProfileIcon from "../components/ProfileIcon";
+import { getProducts } from "../services/api/services";
 
 const Shop = () => {
   const categories = [
@@ -13,11 +14,25 @@ const Shop = () => {
   ];
 
   const [search, setSearch] = useState("");
+  const [items, setItems] = useState([]);
   const [price, setPrice] = useState("");
   const [sort, setSort] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100000);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const product = await getProducts();
+
+        setItems(product.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -30,11 +45,11 @@ const Shop = () => {
   let filteredItems = items.filter(
     (item) =>
       (selectedCategories.length === 0 ||
-        selectedCategories.includes(item.category)) &&
-      (item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.desc.toLowerCase().includes(search.toLowerCase())) &&
-      item.price >= min &&
-      item.price <= max
+        selectedCategories.includes(item.Category)) &&
+      (item.ProductName.toLowerCase().includes(search.toLowerCase()) ||
+        item.ProductDesc.toLowerCase().includes(search.toLowerCase())) &&
+      item.Price >= min &&
+      item.Price <= max
   );
 
   if (price === "Low to High") {
@@ -94,6 +109,7 @@ const Shop = () => {
             <option value={"New"}>Newest</option>
             <option value={"Rate"}>Top Rated</option>
           </select>
+          <ProfileIcon />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

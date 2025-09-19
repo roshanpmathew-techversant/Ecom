@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import generateToken from "../utils/token.js";
+import { generateRefreshToken } from "../utils/token.js";
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -17,12 +19,22 @@ export const registerUser = async (req, res) => {
     const user = await User.create({ name, email, password });
 
     if (user) {
+      const accessToken = generateToken(user._id, user.status);
+      const refreshToken = generateRefreshToken(user._id, user.status);
+
+      // Set refresh token as httpOnly cookie
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false, // true in production with HTTPS
+        sameSite: "strict",
+      });
+
       res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
         status: user.status,
-        token: generateToken(user._id, user.status),
+        token: accessToken, // frontend stores this in localStorage
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -45,12 +57,21 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
+      const accessToken = generateToken(user._id, user.status);
+      const refreshToken = generateRefreshToken(user._id, user.status);
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict",
+      });
+
       res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         status: user.status,
-        token: generateToken(user._id, user.status),
+        token: accessToken,
       });
     } else {
       res.status(401).json({ message: "Invalid credentials" });

@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ShoppingCart, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ItemCard = ({ item }) => {
-  const { id, name, desc, price, image, rating } = item;
+  const {
+    id,
+    name = item.ProductName ?? "Unnamed Product",
+    desc = item.ProductDesc ?? "No description available",
+    price = item.Price ?? 0,
+    image = item.Image ?? "https://via.placeholder.com/150",
+    rating = item.rating ?? 0,
+  } = item;
+
   const Nav = useNavigate();
 
   return (
@@ -11,7 +19,7 @@ const ItemCard = ({ item }) => {
       onClick={() => {
         Nav(`/item/${item.id}`);
       }}
-      className="w-66  bg-white border-2 border-gray-800 p-5 rounded-md shadow-[4px_4px_0px_0px_#323232] flex flex-col gap-3 relative"
+      className="w-66 cursor-pointer  bg-white border-2 border-gray-800 p-5 rounded-md shadow-[4px_4px_0px_0px_#323232] flex flex-col gap-3 relative"
     >
       <div className="absolute top-3 right-3 flex items-center bg-yellow-100 px-2 py-1 rounded-md shadow-sm">
         <p className="text-sm font-medium text-gray-800 flex items-center gap-1">

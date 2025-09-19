@@ -1,8 +1,10 @@
-import items from "../SampleDb/items";
 import React from "react";
+import { useState, useEffect } from "react";
+import { getProducts, GetProductById } from "./api/services";
 
 const FindItem = (id) => {
-  const item = items.find((i) => i.id === Number(id));
+  const item = GetProductById(id);
+  console.log(item);
   return item;
 };
 

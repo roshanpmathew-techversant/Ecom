@@ -19,9 +19,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/item/:id" element={<ProductDetails />} />
 
           {/* Protected Routes */}
-          <Route path="/item/:id" element={<ProductDetails />} />
           <Route path="/admindash" element={<AdminPanel />} />
         </Routes>
       </AuthProvider>

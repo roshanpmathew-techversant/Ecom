@@ -1,0 +1,7 @@
+Admin
+Test@gmail.com
+test123
+
+User
+Roshan1@gmail.com
+Roshan

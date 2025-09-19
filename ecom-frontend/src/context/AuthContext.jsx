@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { currentUser } from "../services/api/services";
+import { matchPath } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -44,45 +45,42 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const validateRoute = async () => {
       setLoading(true);
-      const publicRoutes = ["/login", "/signup"];
-      const isPublicRoute = publicRoutes.includes(location.pathname);
 
-      const tokenExists = !!localStorage.getItem("token");
+      const publicRoutes = ["/login", "/signup", "/", "/shop", "/item/:id"];
+
+      const isPublicRoute = publicRoutes.some((route) =>
+        matchPath({ path: route, end: true }, location.pathname)
+      );
+      const isAuth = await checkAuthUser();
 
       if (isPublicRoute) {
-        if (tokenExists) {
-          const isAuth = await checkAuthUser();
-          if (isAuth) {
-            if (user?.status === "admin")
-              navigate("/admindash", { replace: true });
-            else if (
-              location.pathname === "/login" ||
-              location.pathname === "/signup"
-            ) {
-              navigate("/shop", { replace: true });
-            }
+        if (isAuth) {
+          if (user?.status === "admin") {
+            navigate("/admindash", { replace: true });
+          } else {
+            navigate("/shop", { replace: true });
           }
         }
       } else {
-        const isAuth = await checkAuthUser();
         if (!isAuth) {
+          console.log("Not Logged");
           navigate("/login", { replace: true });
         }
       }
+
       setLoading(false);
     };
 
     validateRoute();
-  }, [location.pathname, navigate, user?.status]);
-
+  }, [location.pathname, navigate]);
   return (
     <AuthContext.Provider
       value={{ user, setUser, isAuthenticated, loading, checkAuthUser }}
     >
-      {children}
+      {loading ? <div>Loading...</div> : children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => useContext(AuthContext);
-export default AuthContext;
+export default AuthProvider;

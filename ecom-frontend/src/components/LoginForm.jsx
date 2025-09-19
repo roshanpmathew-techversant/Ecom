@@ -25,7 +25,10 @@ const LoginForm = () => {
         nav("/shop");
       }
     } catch (e) {
-      console.log("Error", e);
+      const errorMsg =
+        e.response?.data?.message || "Login failed. Please try again.";
+      alert(errorMsg);
+      console.error("Login Error:", e.response?.data || e.message);
     }
   };
 
