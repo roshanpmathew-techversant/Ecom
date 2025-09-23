@@ -1,12 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { GetProductById } from "../services/api/services";
+import {
+  GetProductById,
+  currentUser,
+  AddtoCart,
+} from "../services/api/services";
 import { Star, StarHalf, StarOff, ShoppingCart } from "lucide-react";
 import ImageMagnifier from "../components/ImageMagnifier";
+import ProfileIcon from "../components/ProfileIcon";
 
 const ProductDetails = () => {
+  const [logged, Setlogged] = useState(false);
+
   const { id } = useParams();
   const [item, setItem] = useState(null);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await currentUser();
+
+        if (user) {
+          Setlogged(true);
+        } else {
+          Setlogged(false);
+        }
+      } catch (error) {
+        Setlogged(false);
+      }
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const findItem = async () => {
@@ -42,7 +65,6 @@ const ProductDetails = () => {
     rating = 0,
   } = item;
 
-  // ⭐ Function to render rating stars
   const renderStars = (rating) => {
     const stars = [];
     const roundedRating = Math.floor(rating);
@@ -69,8 +91,23 @@ const ProductDetails = () => {
     return stars;
   };
 
+  const handleCart = async () => {
+    try {
+      const res = await AddtoCart(id);
+      window.location.reload();
+
+      alert(`${ProductName} added to Cart`);
+    } catch (e) {
+      console.log("Error Adding to Cart: ", e);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen relative bg-gray-50 flex items-center justify-center p-4">
+      <div className="absolute top-8 right-40">
+        <ProfileIcon />
+      </div>
+
       <div className="w-full max-w-7xl flex flex-col md:flex-row gap-10 bg-white shadow-lg rounded-lg overflow-hidden p-6">
         <div className="w-full md:w-2/5 flex items-center justify-center bg-gray-100 p-6 rounded-lg">
           <ImageMagnifier src={Image} width={400} height={400} zoom={2} />
@@ -89,11 +126,18 @@ const ProductDetails = () => {
           <p className="text-gray-700 leading-relaxed">{ProductDesc}</p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
-            <button className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition">
+            <button
+              onClick={handleCart}
+              className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!logged}
+            >
               <ShoppingCart className="w-5 h-5" />
               Add to Cart
             </button>
-            <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition">
+            <button
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!logged}
+            >
               Buy Now
             </button>
           </div>

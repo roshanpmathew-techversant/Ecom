@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import ProductDetails from "./pages/ProductDetails";
 import AdminPanel from "./pages/AdminPanel";
+import Cart from "./pages/Cart";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
 
           {/* Protected Routes */}
           <Route path="/admindash" element={<AdminPanel />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </AuthProvider>
     </Router>

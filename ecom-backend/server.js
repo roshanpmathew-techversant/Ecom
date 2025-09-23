@@ -7,6 +7,7 @@ import cors from "cors";
 import AuthRoutes from "./routes/authRoutes.js";
 import AdminRoutes from "./routes/adminRoutes.js";
 import ShopRoutes from "./routes/shopRoutes.js";
+import CartRoutes from "./routes/cartRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,7 @@ ConnectDb();
 app.use("/api/auth", AuthRoutes);
 app.use("/api/admin", AdminRoutes);
 app.use("/api/shop", ShopRoutes);
+app.use("/api/cart", CartRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

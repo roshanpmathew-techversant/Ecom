@@ -86,3 +86,18 @@ export const loginUser = async (req, res) => {
 export const userProfile = async (req, res) => {
   return res.json(req.user);
 };
+export const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "strict",
+    });
+
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error logging out user", error: error.message });
+  }
+};
