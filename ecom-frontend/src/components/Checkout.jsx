@@ -20,7 +20,7 @@ const Checkout = ({ items }) => {
         setProducts(fetchedProducts);
 
         const totalAmount = fetchedProducts.reduce(
-          (acc, item) => acc + item.Price * item.quantity,
+          (acc, item) => acc + (item.offerPrice || item.Price) * item.quantity,
           0
         );
         setTotal(totalAmount);

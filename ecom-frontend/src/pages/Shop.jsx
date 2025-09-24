@@ -26,7 +26,7 @@ const Shop = () => {
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const limit = 8;
+  const limit = 6;
 
   const fetchMoreTimeout = useRef(null);
 
@@ -93,7 +93,6 @@ const Shop = () => {
         : [...prev, category]
     );
   };
-
   return (
     <div className="max-w-7xl mx-auto p-5 flex flex-col lg:flex-row gap-6">
       <div className="w-full lg:w-1/5">
@@ -154,7 +153,7 @@ const Shop = () => {
           }
           className="w-[100%] mx-auto"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-[90%]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10 w-[90%]">
             {items.length ? (
               items.map((item) => <ItemCard key={item._id} item={item} />)
             ) : (

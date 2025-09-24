@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   GetProductById,
   currentUser,
   AddtoCart,
 } from "../services/api/services";
-import { Star, StarHalf, StarOff, ShoppingCart } from "lucide-react";
+import {
+  Star,
+  StarHalf,
+  StarOff,
+  ShoppingCart,
+  ArrowRight,
+} from "lucide-react";
 import ImageMagnifier from "../components/ImageMagnifier";
 import ProfileIcon from "../components/ProfileIcon";
 
 const ProductDetails = () => {
+  const nav = useNavigate();
   const [logged, Setlogged] = useState(false);
+  const [cart, SetCart] = useState([]);
+  const [inCart, SetinCart] = useState(false);
+  const [inStock, SetinStock] = useState(true);
+  const [hasOffer, setOffer] = useState(false);
 
   const { id } = useParams();
   const [item, setItem] = useState(null);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const user = await currentUser();
-
         if (user) {
           Setlogged(true);
+          SetCart(user.cart || []);
         } else {
           Setlogged(false);
         }
@@ -37,6 +49,8 @@ const ProductDetails = () => {
         const res = await GetProductById(id);
         if (res && res.product) {
           setItem(res.product);
+          SetinStock(res.product.stock > 0);
+          setOffer(res.product.offers > 0);
         } else {
           console.log("No Product Found");
         }
@@ -47,6 +61,13 @@ const ProductDetails = () => {
     findItem();
   }, [id]);
 
+  useEffect(() => {
+    if (cart && item) {
+      const exists = cart.some((cartItem) => cartItem.product === item._id);
+      SetinCart(exists);
+    }
+  }, [cart, item]);
+
   if (!item) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -56,6 +77,8 @@ const ProductDetails = () => {
       </div>
     );
   }
+  console.log(item);
+  console.log(hasOffer);
 
   const {
     ProductName = "Unnamed Product",
@@ -63,6 +86,9 @@ const ProductDetails = () => {
     Price = 0,
     Image = "https://via.placeholder.com/150",
     rating = 0,
+    stock = 0,
+    offers = 0,
+    offerPrice = 0,
   } = item;
 
   const renderStars = (rating) => {
@@ -93,10 +119,20 @@ const ProductDetails = () => {
 
   const handleCart = async () => {
     try {
-      const res = await AddtoCart(id);
-      window.location.reload();
+      if (inCart) {
+        nav("/cart");
+      } else {
+        await AddtoCart(id);
 
-      alert(`${ProductName} added to Cart`);
+        SetCart((prev) => [
+          ...(prev || []),
+          { product: item._id, quantity: 1 },
+        ]);
+        SetinCart(true);
+        window.location.reload();
+
+        alert(`${ProductName} added to Cart`);
+      }
     } catch (e) {
       console.log("Error Adding to Cart: ", e);
     }
@@ -121,21 +157,70 @@ const ProductDetails = () => {
             <span className="text-gray-500 text-sm">({rating} out of 5)</span>
           </div>
 
-          <div className="text-2xl font-bold text-green-600">₹{Price}</div>
+          <div>
+            {hasOffer ? (
+              <div className="text-2xl font-bold text-red-600 flex flex-col">
+                ₹{offerPrice}{" "}
+                <span>
+                  <span className="line-through text-gray-500 text-lg ml-2">
+                    ₹{Price}
+                  </span>
+                  <span className=" text-green-500 text-lg ml-2">
+                    {offers}% off
+                  </span>
+                </span>
+              </div>
+            ) : (
+              <div className="text-2xl font-bold text-green-600">₹{Price}</div>
+            )}
+          </div>
 
           <p className="text-gray-700 leading-relaxed">{ProductDesc}</p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
             <button
               onClick={handleCart}
-              className="flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!logged}
+              className="flex cursor-pointer items-center justify-center gap-3 bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!logged || (!inStock && !inCart)}
             >
-              <ShoppingCart className="w-5 h-5" />
-              Add to Cart
+              {inStock ? (
+                <>
+                  <ShoppingCart
+                    className={`w-5 h-5 ${inCart ? "hidden" : "block"}`}
+                  />
+                  {inCart ? (
+                    <span className="flex flex-col items-center gap-2">
+                      <p className="text-[12px] font-extralight">
+                        Already in Cart
+                      </p>
+                      <span className="flex gap-3">
+                        <h1 className="bold">View Cart</h1>
+                        <ArrowRight className="w-4 h-5 relative top-0.5" />
+                      </span>
+                    </span>
+                  ) : (
+                    "Add to Cart"
+                  )}
+                </>
+              ) : !inStock && inCart ? (
+                <span className="flex flex-col items-center gap-2">
+                  <p className="text-[12px] font-extralight">Already in Cart</p>
+                  <span className="flex gap-3">
+                    <h1 className="bold">View Cart</h1>
+                    <ArrowRight className="w-4 h-5 relative top-0.5" />
+                  </span>
+                </span>
+              ) : (
+                <span className="text-red-500 font-semibold">
+                  Item is Out of Stock
+                </span>
+              )}
             </button>
+
             <button
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed ${
+                inStock ? "block" : "hidden"
+              }`}
               disabled={!logged}
             >
               Buy Now

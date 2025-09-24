@@ -35,11 +35,36 @@ const productSchema = new mongoose.Schema(
       min: [0, "Rating cannot be less than 0"],
       max: [5, "Rating cannot be more than 5"],
     },
+    stock: {
+      type: Number,
+      required: false,
+    },
+    offers: {
+      type: Number,
+      required: false,
+      max: [100, "Offers cannot be more than 100%"],
+      min: [0, "Offers cannot be less than 0"],
+      default: 0,
+    },
+
+    offerPrice: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
+productSchema.pre("save", function (next) {
+  if (this.offers && this.Price) {
+    this.offerPrice = Math.round(this.Price - (this.Price * this.offers) / 100);
+  } else {
+    this.offerPrice = Math.round(this.Price);
+  }
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 

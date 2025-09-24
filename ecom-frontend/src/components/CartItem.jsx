@@ -8,12 +8,18 @@ import { Minus, Plus, Trash2 } from "lucide-react"; // nice icons
 
 const CartItem = ({ product, quantity }) => {
   const [Item, setItem] = useState();
+  const [hasOffer, setOffer] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const fetched = await GetProduct(product);
-        if (fetched) setItem(fetched.product);
+
+        if (fetched) {
+          setItem(fetched.product);
+
+          setOffer(fetched.product.offers > 0);
+        }
       } catch (e) {
         console.log(e);
       }
@@ -22,14 +28,27 @@ const CartItem = ({ product, quantity }) => {
   }, [product]);
 
   const AddItem = async () => {
-    await AddtoCart(Item?.id);
-    window.location.reload();
+    try {
+      await AddtoCart(Item?.id);
+
+      window.location.reload();
+    } catch (e) {
+      console.log("Error Adding to Cart:", e);
+      alert("Something went wrong while adding to cart.");
+    }
   };
 
   const RemoveItem = async () => {
-    await RemoveFromCart(Item?.id);
-    window.location.reload();
+    try {
+      await RemoveFromCart(Item?.id);
+
+      window.location.reload();
+    } catch (e) {
+      console.log("Error Removing from Cart:", e);
+      alert("Something went wrong while removing from cart.");
+    }
   };
+  console.log(hasOffer);
 
   return (
     <div className="flex w-full items-center gap-6 bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-100 hover:shadow-md transition-shadow duration-200">
@@ -48,7 +67,9 @@ const CartItem = ({ product, quantity }) => {
         <p className="text-sm text-gray-500 line-clamp-2">
           {Item?.ProductDesc}
         </p>
-        <p className="text-blue-600 font-bold mt-1">₹{Item?.Price}</p>
+        <p className="text-blue-600 font-bold mt-1">
+          ₹{hasOffer ? Item?.offerPrice : Item?.Price}
+        </p>
       </div>
 
       <div className="flex items-center gap-3">

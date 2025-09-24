@@ -31,7 +31,7 @@ const Cart = () => {
       <div className="w-full items-center justify-center flex flex-col mt-10">
         {" "}
         {cartitems.length === 0 ? (
-          <div className="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin mx-auto my-4"></div>
+          <h1>No items In Cart</h1>
         ) : (
           cartitems.map((item) => (
             <div

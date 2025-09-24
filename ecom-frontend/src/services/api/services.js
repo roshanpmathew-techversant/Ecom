@@ -73,7 +73,11 @@ export const AddtoCart = async (id) => {
     const res = await api.post(`/cart/add/${id}`);
     return res.data;
   } catch (e) {
-    console.log("Error Adding to Cart: ", e);
+    if (e.response && e.response.data?.message === "Product Out of Stock") {
+      alert("Sorry, this product is out of stock!");
+    } else {
+      console.log("Error Adding to Cart: ", e);
+    }
   }
 };
 export const RemoveFromCart = async (id) => {

@@ -11,6 +11,10 @@ export const AddtoCart = async (req, res) => {
       return res.status(404).json({ message: "Product Not Found" });
     }
 
+    if (Cartproduct.stock <= 0) {
+      return res.status(400).json({ message: "Product Out of Stock" });
+    }
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not Found" });
@@ -28,6 +32,9 @@ export const AddtoCart = async (req, res) => {
         quantity: 1,
       });
     }
+
+    Cartproduct.stock -= 1;
+    await Cartproduct.save();
 
     await user.save();
 
@@ -69,7 +76,8 @@ export const RemoveItem = async (req, res) => {
         (item) => item.product.toString() !== Cartproduct._id.toString()
       );
     }
-
+    Cartproduct.stock += 1;
+    await Cartproduct.save();
     await user.save();
 
     const updatedUser = await User.findById(userId).populate("cart.product");

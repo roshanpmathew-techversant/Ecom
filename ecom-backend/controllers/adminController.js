@@ -76,3 +76,27 @@ export const DeleteProduct = async (req, res) => {
     });
   }
 };
+
+export const ApplyOffer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { offers } = req.body;
+
+    const OfferApply = await Product.findOne({ id });
+
+    if (!OfferApply) {
+      return res.status(404).json({ message: "⚠️ Product not found" });
+    }
+    OfferApply.offers = offers;
+    await OfferApply.save();
+    res.status(200).json({
+      message: "✅ Offer Applied successfully",
+      OfferApply,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "❌ Failed to Apply Offer",
+      error: error.message,
+    });
+  }
+};
