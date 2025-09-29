@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileIcon = () => {
   const [user, setUser] = useState(null);
+  const [isAdmin, setAdmin] = useState(false);
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -15,7 +17,9 @@ const ProfileIcon = () => {
     const fetchUser = async () => {
       try {
         const fetchedUser = await currentUser();
+        console.log(fetchedUser);
         if (fetchedUser) setUser(fetchedUser);
+        if (fetchedUser?.status == "admin") setAdmin(true);
       } catch (error) {
         setUser(null);
       }
@@ -62,11 +66,11 @@ const ProfileIcon = () => {
 
       {/* Dropdown menu */}
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-10">
+        <div className="absolute right-0 mt-12 w-32 bg-white border rounded shadow-lg z-10">
           {logged ? (
             <>
               <button
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
                   navigate("/profile");
                   setDropdownOpen(false);
@@ -75,11 +79,23 @@ const ProfileIcon = () => {
                 Profile
               </button>
               <button
-                className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
                 onClick={handleLogout}
               >
                 Logout
               </button>
+              {isAdmin ? (
+                <button
+                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    navigate("/admindash");
+                  }}
+                >
+                  DashBoard
+                </button>
+              ) : (
+                ""
+              )}
             </>
           ) : (
             <button

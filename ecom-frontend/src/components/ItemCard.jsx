@@ -51,28 +51,30 @@ const ItemCard = ({ item }) => {
           {offers}% OFF
         </div>
       )}
+      <div onClick={() => Nav(`/item/${id}`)}>
+        <div className="absolute top-3 right-3 flex items-center bg-yellow-100 px-2 py-1 rounded-md shadow-sm">
+          <p className="text-sm font-medium text-gray-800 flex items-center gap-1">
+            {rating}{" "}
+            <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+          </p>
+        </div>
 
-      <div className="absolute top-3 right-3 flex items-center bg-yellow-100 px-2 py-1 rounded-md shadow-sm">
-        <p className="text-sm font-medium text-gray-800 flex items-center gap-1">
-          {rating} <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-        </p>
+        <div
+          className="flex justify-center transition-all duration-300 hover:-translate-y-1"
+          onClick={() => Nav(`/item/${id}`)}
+        >
+          <img
+            className="rounded-3xl cursor-pointer max-h-40 mt-6 object-contain"
+            src={Image}
+            alt={ProductName}
+          />
+        </div>
+
+        <h2 className="text-lg mt-2 font-semibold text-gray-800 text-center">
+          {ProductName}
+        </h2>
+        <p className="text-sm text-gray-500 line-clamp-2">{ProductDesc}</p>
       </div>
-
-      <div
-        className="flex justify-center transition-all duration-300 hover:-translate-y-1"
-        onClick={() => Nav(`/item/${id}`)}
-      >
-        <img
-          className="rounded-3xl cursor-pointer max-h-40 mt-6 object-contain"
-          src={Image}
-          alt={ProductName}
-        />
-      </div>
-
-      <h2 className="text-lg mt-2 font-semibold text-gray-800 text-center">
-        {ProductName}
-      </h2>
-      <p className="text-sm text-gray-500 line-clamp-2">{ProductDesc}</p>
 
       <hr className="w-full border border-gray-800 rounded-full" />
 
@@ -110,7 +112,9 @@ const ItemCard = ({ item }) => {
           <button
             onClick={() => alert("Login to Access Cart")}
             className="cursor-pointer h-9 w-9 flex items-center justify-center border-2 border-gray-800 rounded-md transition-all duration-300 hover:border-red-900 active:translate-y-1"
-          />
+          >
+            <CircleSlash className="w-6 h-6 text-red-800" />
+          </button>
         )}
       </div>
     </div>

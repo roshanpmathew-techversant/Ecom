@@ -2,15 +2,26 @@ import Product from "../models/Product.js";
 
 export const AddProduct = async (req, res) => {
   try {
-    const { id, ProductName, ProductDesc, Image, Category, rating } = req.body;
+    const {
+      id,
+      ProductName,
+      ProductDesc,
+      Image,
+      Price,
+      Category,
+      rating,
+      stock,
+    } = req.body;
 
     const product = new Product({
       id,
       ProductName,
       ProductDesc,
       Image,
+      Price,
       Category,
       rating,
+      stock,
     });
 
     await product.save();
@@ -31,11 +42,11 @@ export const UpdateProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { ProductName, ProductDesc, Image, Category, rating } = req.body;
-
+    const { ProductName, ProductDesc, Image, Price, Category, rating, stock } =
+      req.body;
     const updatedProduct = await Product.findOneAndUpdate(
       { id },
-      { ProductName, ProductDesc, Image, Category, rating },
+      { ProductName, ProductDesc, Image, Price, Category, rating, stock },
       { new: true, runValidators: true }
     );
 

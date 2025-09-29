@@ -4,11 +4,14 @@ import {
   RemoveFromCart,
   GetProduct,
 } from "../services/api/services";
+import { useNavigate } from "react-router-dom";
+
 import { Minus, Plus, Trash2 } from "lucide-react"; // nice icons
 
 const CartItem = ({ product, quantity }) => {
   const [Item, setItem] = useState();
   const [hasOffer, setOffer] = useState(false);
+  const Nav = useNavigate();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -51,12 +54,13 @@ const CartItem = ({ product, quantity }) => {
   console.log(hasOffer);
 
   return (
-    <div className="flex w-full items-center gap-6 bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-100 hover:shadow-md transition-shadow duration-200">
+    <div className=" flex w-full items-center gap-6 bg-white shadow-sm rounded-2xl p-4 mb-4 border border-gray-100 hover:shadow-md transition-shadow duration-200">
       <div className="w-24 h-24 flex-shrink-0">
         <img
           src={Item?.Image}
+          onClick={() => Nav(`/item/${Item?.id}`)}
           alt={Item?.ProductName}
-          className="w-full h-full object-cover rounded-xl"
+          className="w-full h-full object-cover rounded-xl cursor-pointer"
         />
       </div>
 

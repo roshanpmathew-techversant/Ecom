@@ -41,6 +41,14 @@ export const getProducts = async (filters = {}) => {
     console.log(e);
   }
 };
+export const getAllProducts = async () => {
+  try {
+    const res = await api.get("/shop/allproducts");
+    return res.data;
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 export const GetProductById = async (id) => {
   try {
@@ -86,5 +94,42 @@ export const RemoveFromCart = async (id) => {
     return res.data;
   } catch (e) {
     console.log("Error Adding to Cart: ", e);
+  }
+};
+
+export const AddProduct = async (product) => {
+  try {
+    const res = await api.post(`/admin/product`, product);
+    console.log(res);
+    return res;
+  } catch (e) {
+    console.log("Error Adding Product", e);
+  }
+};
+
+export const DltProduct = async (id) => {
+  try {
+    const res = await api.delete(`/admin/product/${id}`);
+    return res;
+  } catch (e) {
+    console.log("Error Deleting Product", e);
+  }
+};
+
+export const AddOffer = async (id, offer) => {
+  try {
+    const res = await api.put(`/admin/offer/${id}`, offer);
+    return res;
+  } catch (e) {
+    console.log("Error adding Offer", e);
+  }
+};
+
+export const UpdateProduct = async (id, product) => {
+  try {
+    const res = await api.put(`/admin/product/${id}`, product);
+    return res;
+  } catch (e) {
+    console.log("Error Updating Product", e);
   }
 };

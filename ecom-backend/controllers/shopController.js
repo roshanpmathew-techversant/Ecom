@@ -76,6 +76,22 @@ export const GetProducts = async (req, res) => {
     });
   }
 };
+export const GetAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find(); // Fetch all products
+
+    res.status(200).json({
+      message: "✅ All products fetched successfully",
+      total: products.length,
+      products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "❌ Failed to fetch products",
+      error: error.message,
+    });
+  }
+};
 
 export const GetProductById = async (req, res) => {
   try {
