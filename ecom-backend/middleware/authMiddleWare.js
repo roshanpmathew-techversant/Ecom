@@ -44,6 +44,12 @@ export const refreshAccessToken = (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, REFRESH);
     const newAccessToken = generateToken(decoded.id, decoded.status);
+
+    /*}console.log(
+      "New Access Token Generated at: ",
+      new Date().toLocaleTimeString()
+    );*/
+
     res.json({
       accessToken: newAccessToken,
     });

@@ -17,7 +17,6 @@ const ProfileIcon = () => {
     const fetchUser = async () => {
       try {
         const fetchedUser = await currentUser();
-        console.log(fetchedUser);
         if (fetchedUser) setUser(fetchedUser);
         if (fetchedUser?.status == "admin") setAdmin(true);
       } catch (error) {
@@ -53,7 +52,6 @@ const ProfileIcon = () => {
       className="relative flex flex-row gap-5 items-center"
       ref={dropdownRef}
     >
-      {/* Profile display */}
       <div
         className="flex flex-row items-center gap-2 cursor-pointer"
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -64,7 +62,6 @@ const ProfileIcon = () => {
         </span>
       </div>
 
-      {/* Dropdown menu */}
       {dropdownOpen && (
         <div className="absolute right-0 mt-12 w-32 bg-white border rounded shadow-lg z-10">
           {logged ? (
@@ -111,7 +108,6 @@ const ProfileIcon = () => {
         </div>
       )}
 
-      {/* Cart icon */}
       <div
         onClick={() => navigate("/cart")}
         className="relative flex items-center cursor-pointer"

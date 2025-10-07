@@ -6,7 +6,7 @@ import {
 } from "../services/api/services";
 import { useNavigate } from "react-router-dom";
 
-import { Minus, Plus, Trash2 } from "lucide-react"; // nice icons
+import { Minus, Plus, Trash2 } from "lucide-react";
 
 const CartItem = ({ product, quantity }) => {
   const [Item, setItem] = useState();

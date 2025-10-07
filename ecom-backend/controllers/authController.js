@@ -22,10 +22,9 @@ export const registerUser = async (req, res) => {
       const accessToken = generateToken(user._id, user.status);
       const refreshToken = generateRefreshToken(user._id, user.status);
 
-      // Set refresh token as httpOnly cookie
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: false, // true in production with HTTPS
+        secure: false,
         sameSite: "strict",
       });
 
@@ -34,7 +33,7 @@ export const registerUser = async (req, res) => {
         name: user.name,
         email: user.email,
         status: user.status,
-        token: accessToken, // frontend stores this in localStorage
+        token: accessToken,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });

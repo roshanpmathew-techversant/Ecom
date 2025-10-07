@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const JWT = process.env.JWT_SECRET;
 const REFRESH = process.env.REFRESH_SECRET;
 const generateToken = (id, status) => {
-  return jwt.sign({ id, status }, JWT, { expiresIn: "15m" });
+  return jwt.sign({ id, status }, JWT, { expiresIn: "1m" });
 };
 
 export const generateRefreshToken = (id, status) => {
