@@ -88,4 +88,8 @@ export const RemoveItem = async (req, res) => {
   }
 };
 
-export const PlaceOrder = async (req, res) => {};
+export const PlaceOrder = async (req, res) => {
+  return {
+    message: "Order Has Been Placed",
+  };
+};

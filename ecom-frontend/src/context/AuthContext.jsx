@@ -45,8 +45,8 @@ export const AuthProvider = ({ children }) => {
     const validateRoute = async () => {
       setLoading(true);
 
-      const authRoutes = ["/login", "/signup"];
-      const publicRoutes = ["/", "/shop", "/item/:id"];
+      const authRoutes = ["/login"];
+      const publicRoutes = ["/", "/shop", "/item/:id", "/signup"];
 
       const isAuthRoute = authRoutes.some((route) =>
         matchPath({ path: route, end: true }, location.pathname)

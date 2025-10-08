@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.post("/add/:id", protect, AddtoCart);
 router.post("/remove/:id", protect, RemoveItem);
-router.get("/placeorder", protect, PlaceOrder);
+router.post("/placeorder", PlaceOrder);
 
 export default router;

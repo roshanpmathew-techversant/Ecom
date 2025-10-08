@@ -29,6 +29,7 @@ export const registerUser = async (req, res) => {
       });
 
       res.status(201).json({
+        message: "User Created",
         _id: user._id,
         name: user.name,
         email: user.email,

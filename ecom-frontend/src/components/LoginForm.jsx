@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { login } from "../services/api/services";
 
 const LoginForm = () => {
@@ -33,71 +32,70 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="w-80 flex flex-col gap-6 rounded-lg shadow-lg p-6 bg-white">
+    <div className="w-full bg-white rounded-2xl shadow-md p-8">
       {/* Header */}
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-slate-700">Login</h2>
-        <p className="text-slate-500 text-sm">Enter your details below.</p>
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Login</h2>
+        <p className="text-gray-500 text-sm mt-1">
+          Enter your details to access your account
+        </p>
       </div>
 
       {/* Form */}
-      <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
-        {/* Username */}
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Email */}
         <input
-          className="outline-none border-2 rounded-md px-3 py-2 text-slate-600 w-full focus:border-blue-400"
-          placeholder="Email"
-          id="email"
-          name="email"
           type="email"
+          name="email"
           value={form.email}
           onChange={handleChange}
+          placeholder="Email"
+          required
+          className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 transition"
         />
 
         {/* Password */}
         <input
-          className="outline-none border-2 rounded-md px-3 py-2 text-slate-600 w-full focus:border-blue-400"
-          placeholder="Password"
-          id="password"
+          type="password"
           name="password"
           value={form.password}
           onChange={handleChange}
-          type="password"
+          placeholder="Password"
+          required
+          className="w-full px-3 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 placeholder-gray-400 transition"
         />
 
         {/* Options */}
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2 text-slate-500">
+        <div className="flex items-center justify-between text-sm mt-1">
+          <label className="flex items-center gap-2 text-gray-600">
             <input
-              className="w-4 h-4 accent-blue-500"
-              id="remember"
-              name="remember"
               type="checkbox"
+              name="remember"
+              className="w-4 h-4 accent-blue-600"
             />
             Remember me
           </label>
-          <a className="text-blue-500 font-medium hover:underline" href="#">
+          <a href="#" className="text-blue-600 hover:underline">
             Forgot Password?
           </a>
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <button
-          className="w-full py-2 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 rounded-md text-white font-medium transition"
-          id="login"
-          name="login"
           type="submit"
+          className="w-full mt-2 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 active:bg-blue-800 transition"
         >
           Login
         </button>
 
-        {/* Sign Up */}
-        <p className="text-center text-sm">
+        {/* Sign Up Link */}
+        <p className="text-center text-sm text-gray-600 mt-3">
           Don’t have an account?{" "}
           <a
-            className="text-blue-500 hover:underline font-medium"
             href="/signup"
+            className="text-blue-600 font-medium hover:underline"
           >
-            SignUp{" "}
+            Sign up
           </a>
         </p>
       </form>
